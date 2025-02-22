@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="adminstyles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h3><i class="fas fa-user-shield"></i>    JOYVERSE</h3>
+        <ul>
+            <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="#"><i class="fas fa-folder"></i> Projects</a></li>
+            <li class="active"><a href="#"><i class="fas fa-tasks"></i> Task list</a></li>
+            <li><a href="#"><i class="fas fa-cogs"></i> Services</a></li>
+            <li><a href="#"><i class="fas fa-bell"></i> Notifications <span class="badge">2</span></a></li>
+            <li><a href="#"><i class="fas fa-comments"></i> Chat</a></li>
+        </ul>
+        <div class="profile">
+            <img src="./src/assets/tahahud.png" alt="Admin">
+            <p>vignesh k</p>
+            <span>jonson@bress.com</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Top Navbar -->
+        <nav class="top-nav">
+            <input type="text" placeholder="Search">
+            <span>Monday, 6th March</span>
+            <div class="toggle-buttons">
+                <button class="btn btn-dark">Card</button>
+                <button class="btn btn-light">List</button>
+            </div>
+        </nav>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <div class="tasks">
+                <h2><b>Latest Reports</b></h2>
+                <p><strong>117 total</strong>, proceed to resolve them</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Game time</th>
+                            <th>Report</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><img src="user1.jpg"> Samanta J.</td>
+                            <td>21-02-2024</td>
+                            <td>3:30pm</td>
+                            <td><span class="status in-progress">In progress</span></td>
+                            <td>6 minutes</td>
+                            <td>View</td>
+                        </tr>
+                        <tr>
+                            <td><img src="user2.jpg"> Bob P.</td>
+                            <td>21-02-2024</td>
+                            <td>4:00 pm</td>
+                            <td><span class="status done">Done</span></td>
+                            <td>running</td>
+                            <td>View</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="charts">
+                <span class="chart-box">
+                    <h3>Schedule an Appointment</h3>
+                    <input type="text" placeholder="id">
+                    <canvas id="productivityChart"></canvas>
+                </span>
+                <span class="projects">
+                    <h3>Child Registration:</h3>
+                    <div class="project-card">
+                        <input type="text" placeholder="Name">
+                        <input type="text" placeholder="Phone Number">
+                        <button class="btn btn-primary">Add</button>
+                    </div>
+                    
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
