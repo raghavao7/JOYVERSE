@@ -1,0 +1,177 @@
+/* Import OpenDyslexic font from local file */
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: url('public/fonts/OpenDyslexic-Regular.otf') format('opentype');
+}
+
+/* Alternatively, use a CDN-hosted version (uncomment if preferred) */
+/* @import url('https://fonts.cdnfonts.com/css/open-dyslexic'); */
+
+@media (max-width: 600px) {
+    .character {
+        width: 150px; /* Smaller on mobile */
+        top: -100px; /* Less overlap */
+    }
+
+    .login-box {
+        width: 200px; /* Slightly smaller on mobile */
+        height: 340px; /* Adjust height for digit boxes */
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 22px; /* Smaller heading on mobile */
+    }
+
+    .input-box {
+        font-size: 16px; /* Smaller input text on mobile */
+    }
+
+    .digit-box {
+        width: 30px; /* Smaller boxes on mobile */
+        height: 30px;
+        font-size: 16px; /* Smaller font on mobile */
+    }
+
+    .login-btn {
+        font-size: 16px; /* Smaller button text on mobile */
+    }
+
+    .options {
+        font-size: 12px; /* Smaller options text on mobile */
+    }
+}
+
+body {
+    background: url('./src/assets/background-pattern.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'OpenDyslexic', sans-serif; /* Updated from Arial */
+    color: #000000; /* High-contrast black text */
+    font-size: 18px; /* Larger base font size */
+    line-height: 1.5; /* Improved readability */
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    position: relative;
+    background: #9ec5cf; /* Light background */
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 250px;
+    height: 340px; /* Increased height to accommodate digit boxes */
+    font-size: 25px;
+    font-family: 'OpenDyslexic', sans-serif; /* Updated from Sigmar */
+}
+
+.character {
+    position: absolute;
+    top: -137px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+}
+
+h2 {
+    color: #333; /* Dark gray for contrast */
+    margin-top: 10px;
+    font-family: 'OpenDyslexic', sans-serif; /* Consistent font */
+    font-size: 28px; /* Slightly larger for emphasis */
+}
+
+.input-box {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-family: 'OpenDyslexic', sans-serif; /* Updated from Sigmar */
+    font-size: 18px; /* Larger text */
+}
+
+.digit-boxes {
+    display: flex;
+    justify-content: center; /* Center the boxes */
+    gap: 5px; /* Small gap between boxes */
+    margin: 10px 0;
+}
+
+.digit-box {
+    width: 35px;
+    height: 35px;
+    border: 2px solid #000; /* Black border to match previous designs */
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    font-family: 'OpenDyslexic', sans-serif;
+    background: #fff; /* White background */
+    outline: none;
+    padding: 0; /* Remove padding for better centering */
+}
+
+.digit-box:focus {
+    border-color: #32cd32; /* Lime green border on focus */
+}
+
+.error-message {
+    color: #ff0000; /* Red for error messages */
+    font-size: 14px;
+    margin-bottom: 10px;
+    min-height: 20px; /* Reserve space to prevent layout shift */
+    font-family: 'OpenDyslexic', sans-serif;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #555; /* Dark button background */
+    color: white; /* High-contrast white text */
+    border: none;
+    border-radius: 5px;
+    font-size: 18px; /* Larger text */
+    cursor: pointer;
+    font-family: 'OpenDyslexic', sans-serif; /* Updated from Sigmar */
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px; /* Slightly larger than original 12px */
+    margin-top: 10px;
+    font-family: 'OpenDyslexic', sans-serif; /* Consistent font */
+}
+
+.admin-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 100px;
+    text-decoration: none;
+    color: #6457f0; /* Purple link */
+    font-size: 16px; /* Slightly larger */
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: opacity 0.3s ease;
+    font-family: 'OpenDyslexic', sans-serif; /* Consistent font */
+}
+
+.admin-btn:hover {
+    opacity: 0.7;
+}
+.login-btn {
+    transition: background 0.3s ease;
+}
+.login-btn:hover {
+    background: #32cd32; /* Match the filled state color */
+}

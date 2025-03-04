@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login UI</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="childstyles.css">
 </head>
 <body>
     <div class="container">
         <div class="login-box">
             <img src="./src/assets/trail2.png" alt="Character" class="character">
             <h2>LOGIN</h2>
-            <input type="text" placeholder="Username" class="input-box">
-            <input type="password" placeholder="Password" class="input-box">
-            <button class="login-btn">SIGN IN</button>
+            <input type="text" placeholder="Username" class="input-box" id="Username">
+            <div class="digit-boxes">
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+                <input type="text" maxlength="1" class="digit-box" oninput="handleInput(this)" onkeydown="handleKeyDown(this, event)" required>
+            </div>
+            <div id="error-message" class="error-message"></div>
+            <button class="login-btn" id="login-btn" onclick="validateLogin()">Join the Fun!</button>
             <div class="options">
                 <label><input type="checkbox"> Remember me</label>
                 <a href="#">Forgot your password?</a>
@@ -21,5 +29,8 @@
         </div>
     </div>
     <a href="/admin" class="admin-btn">Admin</a>
+
+    <!-- Include the separate JavaScript file -->
+    <script src="childscript.js"></script>
 </body>
 </html>

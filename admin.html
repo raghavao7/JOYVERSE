@@ -10,9 +10,9 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Sidebar -->
+    <!-- Sidebar (unchanged) -->
     <div class="sidebar">
-        <h3><i class="fas fa-user-shield"></i>    JOYVERSE</h3>
+        <h3><i class="fas fa-user-shield"></i> JOYVERSE</h3>
         <ul>
             <li><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="#"><i class="fas fa-folder"></i> Projects</a></li>
@@ -23,17 +23,23 @@
         </ul>
         <div class="profile">
             <img src="./src/assets/tahahud.png" alt="Admin">
-            <p>vignesh k</p>
+            <p>vignesh koppuravuri</p>
             <span>jonson@bress.com</span>
         </div>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        
-        <!-- Top Navbar -->
+        <!-- Top Navbar (unchanged) -->
         <nav class="top-nav">
-            <input type="text" placeholder="Search">
+            <div class="search-container">
+                <input type="text" placeholder="Search..." class="search-input">
+                <button class="search-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
             <span>Monday, 6th March</span>
             <div class="toggle-buttons">
                 <button class="btn btn-dark">Card</button>
@@ -87,11 +93,10 @@
                 <span class="projects">
                     <h3>Child Registration:</h3>
                     <div class="project-card">
-                        <input type="text" placeholder="Name">
-                        <input type="text" placeholder="Phone Number">
-                        <button class="btn btn-primary">Add</button>
-                    </div>
-                    
+                        <input type="text" id="childName" placeholder="Name">
+                        <input type="text" id="phoneNumber" placeholder="Phone Number">
+                        <button class="btn btn-primary" id="addChildBtn">Add</button>
+                        <p id="generatedCode" class="mt-2 text-success" style="display: none;">Generated Code: <span id="codeValue"></span></p>
                     </div>
                 </span>
             </div>
@@ -100,6 +105,6 @@
 
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <script src="adminscript.js" defer></script> <!-- Ensure script.js loads after DOM -->
 </body>
 </html>
