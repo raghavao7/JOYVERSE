@@ -22,40 +22,44 @@ function handleKeyDown(currentInput, event) {
 }
 
 function validateInputs() {
-    const username = document.getElementById('Username').value; // FIXED ID
+    const name = document.getElementById('Username').value.trim(); // Changed to match backend
     const digitBoxes = document.querySelectorAll('.digit-box');
     const loginBtn = document.getElementById('login-btn');
     const errorMessage = document.getElementById('error-message');
 
-    const allFilled = username.length > 0 && Array.from(digitBoxes).every(box => box.value.length === 1 && /^\d$/.test(box.value));
+    const userId = Array.from(digitBoxes).map(box => box.value).join('');
+
+    const allFilled = name.length > 0 && userId.length === 6 && /^\d{6}$/.test(userId);
 
     if (allFilled) {
         loginBtn.style.background = '#32cd32';
         errorMessage.textContent = "";
     } else {
         loginBtn.style.background = '#555';
-        errorMessage.textContent = username.length === 0
-            ? "Please enter your username!"
+        errorMessage.textContent = name.length === 0
+            ? "Please enter your name!"
             : "Please fill all 6 boxes with digits!";
     }
 }
 
 function validateLogin() {
-    const username = document.getElementById('Username').value; // FIXED ID
+    const name = document.getElementById('Username').value.trim();
     const digitBoxes = document.querySelectorAll('.digit-box');
     const errorMessage = document.getElementById('error-message');
     const loginBtn = document.getElementById('login-btn');
 
-    if (!username) {
-        errorMessage.textContent = "Please enter your username!";
+    if (!name) {
+        errorMessage.textContent = "Please enter your name!";
         return;
     }
 
-    const id = Array.from(digitBoxes).map(box => box.value).join('');
-    if (id.length !== 6 || !/^\d{6}$/.test(id)) {
+    const userId = Array.from(digitBoxes).map(box => box.value).join('');
+    if (userId.length !== 6 || !/^\d{6}$/.test(userId)) {
         errorMessage.textContent = "Please fill all 6 boxes with digits!";
         return;
     }
+
+    console.log("Sending Login Data:", { name, userId }); // Debugging
 
     errorMessage.textContent = "";
     loginBtn.disabled = true;
@@ -66,15 +70,18 @@ function validateLogin() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, id }),
+        body: JSON.stringify({ name, userId }),
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-            alert(data.message);
+        console.log("Server Response:", data); // Debugging
+
+        if (data.token) {
+            alert("Login successful!");
+            localStorage.setItem('token', data.token);
             window.location.href = '/dashboard.html';
         } else {
-            errorMessage.textContent = "Invalid credentials!"; // SHOW ERROR MESSAGE FOR INCORRECT CREDENTIALS
+            errorMessage.textContent = "Invalid credentials!";
         }
     })
     .catch(error => {
