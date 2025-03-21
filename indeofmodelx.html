@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JoyVerse - Dyslexia Adaptive Quiz</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=OpenDyslexic">
+    <style>
+        body { 
+            font-family: 'OpenDyslexic', Arial, sans-serif;
+            text-align: center; 
+            margin: 20px; 
+            transition: background 0.5s; 
+            background-size: cover; /* Ensure background image covers the body */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Prevent tiling */
+            color: #fff; /* White text for better contrast on backgrounds */
+            text-shadow: 1px 1px 2px #000; /* Add shadow to text for readability */
+            min-height: 100vh; /* Ensure body takes full height */
+        }
+        video { width: 320px; height: 240px; margin: 10px; border: 2px solid #ddd; border-radius: 5px; }
+        canvas { display: none; }
+        button { margin: 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; background: rgba(255, 255, 255, 0.8); border: 1px solid #333; }
+        #question { font-size: 24px; margin: 20px; font-weight: bold; }
+        #options { margin: 20px; }
+        .option-btn { padding: 10px; margin: 5px; font-size: 18px; background: rgba(255, 255, 255, 0.8); border: 1px solid #333; }
+        #feedback { font-size: 18px; }
+        .theme-neutral { background: #f0f0f0af url('https://i.imgur.com/8l5z7kM.jpg') center/cover no-repeat; color: #333; text-shadow: none; }
+        .theme-happy { background: #ffe066 url('https://i.imgur.com/5yXvZ8P.jpg') center/cover no-repeat; }
+        .theme-sad { background: #b3cde0 url('https://i.imgur.com/9KjXh2L.jpg') center/cover no-repeat; }
+        .theme-angry { background: #ff9999 url('https://i.imgur.com/7nZqB3m.jpg') center/cover no-repeat; }
+        .theme-surprised { background: #cc99ff url('https://i.imgur.com/3pXzTjK.jpg') center/cover no-repeat; }
+        .theme-confused { background: #99ffdd url('https://i.imgur.com/2qYvM8N.jpg') center/cover no-repeat; }
+        .theme-bored { background: #99cc99 url('https://i.imgur.com/6tXzP9Q.jpg') center/cover no-repeat; }
+        #gif-display { margin: 20px auto; width: 300px; height: 200px; }
+        #theme-gif { width: 100%; height: 100%; object-fit: contain; background: rgba(255, 255, 255, 0.5); border-radius: 10px; }
+    </style>
+</head>
+<body class="theme-neutral">
+    <h2>JoyVerse: Adaptive Quiz for Dyslexic Kids</h2>
+    <video id="video" autoplay></video>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <button onclick="startQuiz()">Start Quiz</button>
+
+    <h3>Current Question:</h3>
+    <p id="question">Click "Start Quiz" to begin</p>
+    <div id="options"></div>
+    <p id="feedback"></p>
+
+    <div id="gif-display">
+        <img id="theme-gif" src="" alt="Theme GIF" style="display: none;">
+    </div>
+
+    <h3>Analysis:</h3>
+    <p><b>Detected Emotion:</b> <span id="emotion">N/A</span></p>
+    <p><b>Next Action:</b> <span id="action">N/A</span></p>
+    <p><b>Current Theme:</b> <span id="theme">Neutral</span></p>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        let currentQuestion = 0;
+        let theme = "neutral";
+        const maxQuestions = 4;
+        const imagesPerQuestion = 4;
+
+        const questions = [
+            { q: "What color is the sky?", options: ["Blue", "Red", "Green"], answer: "Blue" },
+            { q: "What animal says 'meow'?", options: ["Dog", "Cat", "Bird"], answer: "Cat" },
+            { q: "What comes after Tuesday?", options: ["Monday", "Wednesday", "Friday"], answer: "Wednesday" },
+            { q: "Which is a fruit?", options: ["Apple", "Car", "Book"], answer: "Apple" }
+        ];
+
+        const themeGifs = {
+            neutral: "https://media1.tenor.com/m/vbvqOPixsQ0AAAAC/dap.gif",
+            happy: "https://media1.tenor.com/m/vbvqOPixsQ0AAAAC/dap.gif",
+            sad: "https://media1.tenor.com/m/Q5kN2F2e8pAAAAAC/doraemon-cry.gif",
+            angry: "https://media1.tenor.com/m/_7iV64VvkaMAAAAC/doraemon-angry.gif",
+            surprised: "https://media1.tenor.com/m/5tL8Xz9vD8QAAAAC/doraemon-shocked.gif",
+            confused: "https://media1.tenor.com/m/44CbaYfUL98AAAAd/bird-cartoon.gif",
+            bored: "https://media1.tenor.com/m/7Y5z5u5z5zQAAAAC/doraemon-bored.gif"
+        };
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => video.srcObject = stream)
+            .catch(err => {
+                console.error("Webcam error:", err);
+                alert("Please allow camera access.");
+            });
+
+        function captureFrame() {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL("image/jpeg");
+        }
+
+        function captureMultipleFrames(callback) {
+            let frames = [];
+            let captures = 0;
+            const interval = setInterval(() => {
+                frames.push(captureFrame());
+                captures++;
+                if (captures === imagesPerQuestion) {
+                    clearInterval(interval);
+                    callback(frames);
+                }
+            }, 1000);
+        }
+
+        function analyzeEmotions(frames) {
+            const formData = new FormData();
+            frames.forEach((frame, index) => {
+                formData.append(`frame${index}`, dataURLtoBlob(frame));
+            });
+            formData.append("previous_actions", `${theme},question${currentQuestion}`);
+
+            fetch("http://127.0.0.1:5000/analyze-frames", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("emotion").innerText = data.emotion || "N/A";
+                document.getElementById("action").innerText = data.action || "N/A";
+                adjustQuiz(data.action, data.emotion);
+                document.getElementById("theme").innerText = theme.charAt(0).toUpperCase() + theme.slice(1);
+                if (currentQuestion < maxQuestions) {
+                    displayQuestion();
+                } else {
+                    endQuiz();
+                }
+            })
+            .catch(error => console.error("Fetch Error:", error));
+        }
+
+        function dataURLtoBlob(dataURL) {
+            const [header, data] = dataURL.split(",");
+            const mime = header.match(/:(.*?);/)[1];
+            const binary = atob(data);
+            const array = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) array[i] = binary.charCodeAt(i);
+            return new Blob([array], { type: mime });
+        }
+
+        function adjustQuiz(action, emotion) {
+            const emotionToTheme = {
+                "happy": "happy",
+                "sad": "sad",
+                "angry": "angry",
+                "surprised": "surprised",
+                "neutral": "neutral",
+                "confused": "confused",
+                "bored": "bored"
+            };
+            theme = emotionToTheme[emotion] || "neutral";
+            document.body.className = `theme-${theme}`;
+            const gifElement = document.getElementById("theme-gif");
+            gifElement.src = themeGifs[theme];
+            gifElement.style.display = "block";
+            console.log(`Emotion: ${emotion}, Action: ${action}, Theme: ${theme}, GIF: ${themeGifs[theme]}`);
+        }
+
+        function displayQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById("question").innerText = `Question ${currentQuestion + 1}: ${q.q}`;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            q.options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt, q.answer);
+                optionsDiv.appendChild(btn);
+            });
+            console.log(`Displayed Question ${currentQuestion + 1}`);
+        }
+
+        function checkAnswer(selected, correct) {
+            const feedback = document.getElementById("feedback");
+            if (selected === correct) {
+                feedback.innerText = "Great job! Analyzing your emotions...";
+                captureMultipleFrames(frames => {
+                    feedback.innerText = "Great job!";
+                    analyzeEmotions(frames);
+                    currentQuestion++;
+                });
+            } else {
+                feedback.innerText = "Try again!";
+            }
+        }
+
+        function startQuiz() {
+            currentQuestion = 0;
+            theme = "neutral";
+            document.body.className = "theme-neutral";
+            document.getElementById("feedback").innerText = "";
+            document.getElementById("emotion").innerText = "N/A";
+            document.getElementById("action").innerText = "N/A";
+            document.getElementById("theme").innerText = "Neutral";
+            const gifElement = document.getElementById("theme-gif");
+            gifElement.src = themeGifs["neutral"];
+            gifElement.style.display = "block";
+            displayQuestion();
+        }
+
+        function endQuiz() {
+            document.getElementById("question").innerText = "Quiz Complete!";
+            document.getElementById("options").innerHTML = "";
+            document.getElementById("feedback").innerText = "Well done!";
+            document.getElementById("theme-gif").style.display = "none";
+        }
+    </script>
+</body>
+</html>
