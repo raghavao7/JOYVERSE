@@ -59,7 +59,10 @@ function validateLogin() {
         return;
     }
 
-    console.log("Sending Login Data:", { name, userId }); // Debugging
+    // 🔥 ADD PASSWORD INPUT
+    const password = userId; // Since the password is the same as userId during registration
+
+    console.log("Sending Login Data:", { name, userId, password }); // Debugging
 
     errorMessage.textContent = "";
     loginBtn.disabled = true;
@@ -70,16 +73,21 @@ function validateLogin() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, userId }),
+        body: JSON.stringify({ name, userId, password }), // 🔥 SEND PASSWORD
     })
     .then(response => response.json())
     .then(data => {
         console.log("Server Response:", data); // Debugging
-
+    
         if (data.token) {
             alert("Login successful!");
             localStorage.setItem('token', data.token);
-            window.location.href = '/dashboard.html';
+    
+            // ❌ Remove dashboard.html check for now
+            window.location.href = './error.html'; // Redirect to error.html by default
+    
+            // ✅ When dashboard.html is ready, update this to:
+            // window.location.href = '/dashboard.html';
         } else {
             errorMessage.textContent = "Invalid credentials!";
         }
@@ -92,6 +100,7 @@ function validateLogin() {
         loginBtn.textContent = "Join the Fun!";
     });
 }
+
 
 
 // Fix paste event for all digit boxes

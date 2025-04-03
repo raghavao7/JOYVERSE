@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    flex-wrap: wrap; /* Allows wrapping for smaller screens */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('src/assets/dashboardbg1.png'); /* Background only for main content */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 300px; /* Ensures minimum height */
+}
+
+.play-button {
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    padding: 20px 40px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.play-button:hover {
+    background-color: #e68900;
+}
+
+.profile-section {
+    width: 250px;
+    background: white;
+    padding: 20px;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* Stack items vertically */
+        align-items: center;
+    }
+
+    .profile-section {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+}
